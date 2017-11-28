@@ -65,11 +65,14 @@ class PostsController < ApplicationController
     end
   end
   
-  def create_comment
-    @c = @post.create(comment_params) #현재 post id함께 거기에 comments 함께 작성
+   def create_comment
+    @c = @post.comments.create(comment_params)
   end
 
-
+  def destroy_comment
+    @c = Comment.find(params[:comment_id]).destroy
+  end
+  
   def like_post
       
       if Like.where(user_id: current_user.id, post_id: @post.id).first.nil?
@@ -110,8 +113,8 @@ class PostsController < ApplicationController
       params.require(:post).permit(:title, :contents)
     end
     
-    def comment_params
-      params.require(:post).permit(:body)
+     def comment_params
+      params.require(:comment).permit(:body)
     end
     
     #개발자가 목표로 한 부분만 파라미터를 받는다.
