@@ -11,7 +11,7 @@
 </p>
 
 <%= form_tag create_comment_to_post_path, id: "comment" do %>
-  <%= text_field_tag :body %>
+  <%= text_field_tag "comment[body]" %>
   <%= submit_tag "댓글달기" %>
 
 <% end %>
@@ -55,7 +55,8 @@
     form.on('submit', function(e) { //parameter에 매개변수 event e 
       e.preventDefault(); //method 실행
       //console.log("haha"); form 클릭시 haha 출력, 이벤트 바인딩 완료
-      var contents = $('#body').val(); // id = body에 value롤 가지고온다.
+      var contents = form.serialize(); // id = body에 value롤 가지고온다.
+      //var contents = $('#comment_body').val();
       console.log(contents);
       $.ajax({
         url: "<%= create_comment_to_post_path %>",

@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy, :create_comment, :like_post]
-
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :create_comment, :like_post ]
+  before_action :is_login?, only: [:create_comment, :destroy_comment, :like_post]
   # GET /posts
   # GET /posts.json
   def index
@@ -10,7 +10,10 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @like = current_user.likes.find_by(post_id: @post.id).nil?
+      @like = true
+    if user_signed_in?
+      @like = current_user.likes.find_by(post_id: @post.id).nil?
+    end
   end
 
   # GET /posts/new
@@ -63,21 +66,12 @@ class PostsController < ApplicationController
   end
   
   def create_comment
-    unless user_signed_in?
-      respond_to do |format|
-        format.js { render 'please_login.js.erb' }
-      end
-    end
-    @c = @post.comments.create(body: params[:body]) #현재 post id함께 거기에 comments 함께 작성
+    @c = @post.create(comment_params) #현재 post id함께 거기에 comments 함께 작성
   end
 
 
   def like_post
-    unless user_signed_in?
-      respond_to do |format|
-        format.js { render 'please_login.js.erb' }
-      end
-    else
+      
       if Like.where(user_id: current_user.id, post_id: @post.id).first.nil?
         #@post를 쓰기 위해선 set post를 해야한다. before action에 추가한다.
         #좋아요를 누르지 않은 상태에 대한 실행문
@@ -96,10 +90,16 @@ class PostsController < ApplicationController
       #@post.destroy
       #사라지지않고 freeze 됨. 메모리에는 존재하지만 DB에는 존재하지않는존재가된다.
       # freeze => frozen? true 이면 좋아요 취소한 경우이다.
-    end
   end
   
   private
+    def is_login?
+      unless user_signed_in?
+        respond_to do |format|
+          format.js { render 'please_login.js.erb' }
+        end
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_post
       @post = Post.find(params[:id])
@@ -109,4 +109,10 @@ class PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:title, :contents)
     end
+    
+    def comment_params
+      params.require(:post).permit(:body)
+    end
+    
+    #개발자가 목표로 한 부분만 파라미터를 받는다.
 end
