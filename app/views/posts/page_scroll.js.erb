@@ -1,1 +1,14 @@
-console.log("스크롤무한ㅋㅋㅋㅋㅋ");
+alert("스크롤무한ㅋㅋㅋㅋㅋ");
+<% @posts.each do |post| %>
+    $('#mytable tbody').append(
+    `
+     <tr>
+        <td><%= post.id %></td>
+        <td><%= post.title %></td>
+        <td><%= post.contents %></td>
+        <td><%= link_to 'Show', post %></td>
+        <td><%= link_to 'Edit', edit_post_path(post) %></td>
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    `);
+<% end%>

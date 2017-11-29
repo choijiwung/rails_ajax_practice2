@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.order("created_at").page(params[:page])
+    @posts = Post.order("created_at DESC").page(params[:page])
   end
 
   # GET /posts/1
@@ -97,7 +97,7 @@ class PostsController < ApplicationController
   end
     
     def page_scroll
-      puts "haha"
+      @posts = Post.order("created_at DESC").page(params[:page])
     end
   
   

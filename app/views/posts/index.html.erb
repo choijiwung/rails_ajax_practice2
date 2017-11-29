@@ -2,7 +2,7 @@
 
 <h1>Listing Posts</h1>
 <%= link_to 'New Post', new_post_path %>
-<table class="table">
+<table class="table" id= "mytable">
   <thead>
     <tr>
       <th>No.</th>
@@ -33,7 +33,7 @@
 
 <script>
   $(function(){
-    var page_scroll_index = 1;
+    var page_scroll_index = 2;
     $(document).on('scroll', function() {
       console.log("움직인다다다다다")
       
@@ -41,11 +41,15 @@
       if($(window).scrollTop() >= $(document).height() - $(window).height()){
        $.ajax({
          method: "GET",
-         url: "<%= scroll_posts_path%>"
+         url: "<%= scroll_posts_path%>",
+         data:{
+         page: page_scroll_index++
+         }
        })
       }
     });
     
   });
-  
+  // 500 루비 문법 오류 
+  // render 까지 되었는데 안되는건 자바스크립트문법
 </script>
