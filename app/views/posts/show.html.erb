@@ -15,6 +15,8 @@
   <%= submit_tag "댓글달기" %>
 
 <% end %>
+<h3><span id="word_count">0</span>/50</h3>
+
 <%= link_to 'Edit', edit_post_path(@post), class: "btn btn-warning" %> 
 <%= link_to 'Back', posts_path, class: "btn btn-success" %>
 <% if @like %>
@@ -63,6 +65,19 @@
         data: $('#form_comment').serialize()
       });
     });
+    var max_text_length = 50;
+    $('#comment').on('keyup', function(){
+      var text_length = $('#comment_body').val().length;
+      $('#word_count').addClass('text-success').removeClass('text-danger');
+      if(text_length >= max_text_length){
+        alert("최대 길이 넘음")
+        $('#word_count').addClass('text-danger').removeClass('text-success')
+        $('#comment_body').val($('#comment_body').val().substr(0,max_text_length));
+        text_length = $('#comment_body').val().length;
+      }
+      $('#word_count').text(text_length);
+    })
+    
   })
 </script>
 
