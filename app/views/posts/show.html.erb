@@ -31,10 +31,12 @@
     </tr>
   </thead>
   <tbody>
-    <% @post.comments.reverse.each do |p| %>
-    <tr>
-      <td><%= p.body %></td>
+    <% @post.comments.reverse.each do |c| %>
+    <tr id= "comment-<%c.id%>">
+      <td><%= c.body %></td>
+      <td><%= link_to "삭제", destroy_comment_posts_path(c.id), method: "DELETE", class: "btn btn-warning",remote: true%></td>
     </tr>
+    
     <% end %>
   </tbody>
 </table>
@@ -49,8 +51,7 @@
         url: "<%= like_to_post_path %>"
       })
     })
-    var form = $('#comment');
-    $(document).on('submit','#comment', function(e) {
+   $('#').on('click', function(e) {
       e.preventDefault();
       var contents = form.serialize();
       // var contents = $("#comment_body").val();
@@ -58,10 +59,9 @@
       $.ajax({
         url: "<%= create_comment_to_post_path %>",
         method: "POST",
-        data: contents
+        data: $('#form_comment').serialize()
       });
     });
-    
   })
 </script>
 

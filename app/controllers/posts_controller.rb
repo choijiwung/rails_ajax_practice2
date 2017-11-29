@@ -71,6 +71,7 @@ class PostsController < ApplicationController
 
   def destroy_comment
     @c = Comment.find(params[:comment_id]).destroy
+    #comment id로 우리가 원하는 comment를 찾고 삭제를 한다.
   end
   
   def like_post
