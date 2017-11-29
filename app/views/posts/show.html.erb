@@ -32,7 +32,7 @@
   </thead>
   <tbody>
     <% @post.comments.reverse.each do |c| %>
-    <tr id= "comment-<%c.id%>">
+    <tr id="comment-<%=c.id%>">
       <td><%= c.body %></td>
       <td><%= link_to "삭제", destroy_comment_posts_path(c.id), method: "DELETE", class: "btn btn-warning",remote: true%></td>
     </tr>
@@ -51,7 +51,8 @@
         url: "<%= like_to_post_path %>"
       })
     })
-   $('#').on('click', function(e) {
+   $('#comment').on('submit', function(e) {
+     var form=$('#comment')
       e.preventDefault();
       var contents = form.serialize();
       // var contents = $("#comment_body").val();

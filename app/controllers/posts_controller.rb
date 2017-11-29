@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.order("created_at").page(params[:page])
   end
 
   # GET /posts/1
@@ -70,7 +70,7 @@ class PostsController < ApplicationController
   end
 
   def destroy_comment
-    @c = Comment.find(params[:comment_id]).destroy
+    @c = Comment.find_by(params[:comment_id]).destroy
     #comment id로 우리가 원하는 comment를 찾고 삭제를 한다.
   end
   
@@ -95,6 +95,11 @@ class PostsController < ApplicationController
       #사라지지않고 freeze 됨. 메모리에는 존재하지만 DB에는 존재하지않는존재가된다.
       # freeze => frozen? true 이면 좋아요 취소한 경우이다.
   end
+    
+    def page_scroll
+      puts "haha"
+    end
+  
   
   private
     def is_login?
@@ -117,6 +122,7 @@ class PostsController < ApplicationController
      def comment_params
       params.require(:comment).permit(:body)
     end
-    
+  
+  
     #개발자가 목표로 한 부분만 파라미터를 받는다.
 end
